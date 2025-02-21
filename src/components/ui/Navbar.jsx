@@ -1,8 +1,22 @@
-import React from 'react'
-import { useNavigate } from 'react-router';
+import React, { useContext } from "react";
+import { useNavigate } from "react-router";
+import { AuthContext } from "../../provider/AuthProvider";
 
 const Navbar = () => {
   const navigate = useNavigate();
+  const { user, logoutUser } = useContext(AuthContext);
+
+  const handleLogout = async () => {
+    if (user) {
+      try {
+        await logoutUser();
+        // toast.success("User logged out successfully");
+        navigate("/"); // Navigate after successful logout
+      } catch (error) {
+        console.error("Error logging out:", error.message);
+      }
+    }
+  };
 
   return (
     <div className="navbar bg-blue-400 shadow-sm px-8">
@@ -74,10 +88,21 @@ const Navbar = () => {
         </ul>
       </div>
       <div className="navbar-end">
-        <button onClick={() => navigate("/login")} className='px-4 py-2 bg-red-300 rounded-xl text-lg text-gray-50 cursor-pointer hover:bg-red-400'>Login</button>
+        <button
+          onClick={() => navigate("/login")}
+          className="px-4 py-2 bg-red-300 rounded-xl text-lg text-gray-50 cursor-pointer hover:bg-red-400"
+        >
+          Login
+        </button>
+        <button
+          onClick={() => handleLogout()}
+          className="px-4 py-2 bg-red-300 rounded-xl text-lg text-gray-50 cursor-pointer hover:bg-red-400"
+        >
+          Logout
+        </button>
       </div>
     </div>
   );
-}
+};
 
-export default Navbar
+export default Navbar;

@@ -60,6 +60,8 @@ const Register = () => {
       );
       return;
     }
+    //autogenerate a user id while signup
+    const userId = Math.floor(Math.random() * 100000);
 
     // Create user using Auth Provider
     createUser(data.email, data.password)
@@ -69,6 +71,8 @@ const Register = () => {
         const userInfo = {
           name: data.username,
           email: data.email,
+          userId: userId,
+          photoURL: data.photoUrl,
         };
         axiosPublic.post("/user/add-user-data", userInfo).then((res) => {
           if (res.data.insertedId) {

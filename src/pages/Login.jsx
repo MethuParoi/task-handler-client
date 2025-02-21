@@ -58,6 +58,8 @@ const Login = () => {
       console.error("Error logging in:", error.message);
     }
   };
+  //autogenerate a user id while signup
+  const userId = Math.floor(Math.random() * 100000);
 
   const handleGoogleSignIn = async () => {
     try {
@@ -65,6 +67,7 @@ const Login = () => {
         const userInfo = {
           email: result?.user?.email,
           name: result?.user?.displayName,
+          userId: userId,
         };
         axiosPublic.post("/user/add-google-user-data", userInfo).then((res) => {
           navigate(from, { replace: true });
