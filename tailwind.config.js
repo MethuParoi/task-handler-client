@@ -18,7 +18,7 @@ export default {
       {
         light: {
           primary: "#0F4C75",
-          secondary: "#3282B8",
+          secondary: "#FFB4A2",
           // accent: "#BBE1FA",
           accent: "#FFC7C7",
           accentHover: "#fca5a5",

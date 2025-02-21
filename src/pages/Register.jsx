@@ -138,7 +138,7 @@ const Register = () => {
               })}
               autoComplete="name"
               placeholder="Enter a username"
-              className="w-full px-4 py-2 mt-1 text-sm border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="w-full px-4 py-2 mt-1 text-sm border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 border-1 border-gray-800 text-gray-800"
             />
             {errors.username && (
               <span className="text-red-500">{errors.username.message}</span>
@@ -158,7 +158,7 @@ const Register = () => {
               {...register("photoUrl", { required: "Avatar URL is required" })}
               autoComplete="photo"
               placeholder="Enter a photo URL"
-              className="w-full px-4 py-2 mt-1 text-sm border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="w-full px-4 py-2 mt-1 text-sm border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 border-1 border-gray-800 text-gray-800"
             />
             {errors.photoUrl && (
               <span className="text-red-500">{errors.photoUrl.message}</span>
@@ -178,7 +178,7 @@ const Register = () => {
               {...register("email", { required: "Email is required" })}
               autoComplete="email"
               placeholder="Enter a valid e-mail"
-              className="w-full px-4 py-2 mt-1 text-sm border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="w-full px-4 py-2 mt-1 text-sm border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 border-1 border-gray-800 text-gray-800"
             />
             {errors.email && (
               <span className="text-red-500">{errors.email.message}</span>
@@ -212,12 +212,12 @@ const Register = () => {
               })}
               autoComplete="new-password"
               placeholder="Enter a strong password"
-              className="w-full px-4 py-2 mt-1 text-sm border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="w-full px-4 py-2 mt-1 text-sm border-1 border-gray-800 text-gray-800 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
             />
             <button
               type="button"
               onClick={togglePasswordVisibility}
-              className="absolute inset-y-0 right-4 top-0 flex items-center text-gray-600 hover:text-gray-800"
+              className="absolute inset-y-0 right-4 top-5 flex items-center text-gray-600 hover:text-gray-800"
             >
               {showPassword ? <FaEyeSlash /> : <FaEye />}
             </button>
@@ -228,7 +228,7 @@ const Register = () => {
 
           <button
             type="submit"
-            className="w-full py-2 mt-4 font-semibold text-white bg-primary rounded-md hover:bg-secondary focus:outline-none focus:ring-2 focus:ring-blue-400 text-lg"
+            className="w-full px-4 py-2 text-lg font-medium text-white bg-indigo-700 rounded-md hover:bg-indigo-800 cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-400"
           >
             Sign Up
           </button>
@@ -236,7 +236,7 @@ const Register = () => {
 
         <button
           onClick={() => handleGoogleSignIn()}
-          className="w-full flex justify-center items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-secondary rounded-md hover:bg-primary focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className="w-full flex justify-center items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-red-300 rounded-md hover:bg-red-400 focus:outline-none focus:ring-2 focus:ring-blue-400"
         >
           <FaGoogle />
           <p className="text-lg">Login with Google</p>
@@ -244,16 +244,16 @@ const Register = () => {
 
         <p className="text-sm text-center text-gray-600">
           Already have an account?{" "}
-          <Link to="/login" className="text-blue-500 hover:underline">
+          <Link to="/" className="text-blue-500 hover:underline">
             Log in
           </Link>
         </p>
 
-        <div className="flex items-center justify-center">
+        {/* <div className="flex items-center justify-center">
           <Link to="/" className="text-blue-500 hover:underline">
             Back to Home
           </Link>
-        </div>
+        </div> */}
 
         {errors && <p className="text-sm text-red-500">{errors.message}</p>}
       </div>
