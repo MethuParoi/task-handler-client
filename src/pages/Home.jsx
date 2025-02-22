@@ -1,46 +1,81 @@
 import { Helmet } from "react-helmet-async";
-import { useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import { DndContext } from "@dnd-kit/core";
 import DroppableSection from "../components/home/DroppableSection";
-import axios from "axios";
+import useAxiosPublic from "../hooks/useAxiosPublic";
+import { AuthContext } from "../provider/AuthProvider";
+import AddTaskModal from "../components/home/AddTaskModal";
 
 const Home = () => {
-  const [tasks1, setTasks1] = useState([
-    { id: "1", title: "Task 1", status: "todo" },
-    { id: "2", title: "Task 2", status: "todo" },
-    // { id: "3", title: "Task 3", status: "inProgress" },
-    // { id: "4", title: "Task 4", status: "done" },
-  ]);
+  const [todoTask, setTodoTask] = useState([]);
+  const [inProgressTask, setInProgressTask] = useState([]);
+  const [doneTask, setDoneTask] = useState([]);
+  const { user } = useContext(AuthContext);
+  const axiosPublic = useAxiosPublic();
 
-  const [tasks12, setTasks12] = useState([
-    { id: "12", title: "Task 12", status: "todo" },
-    { id: "22", title: "Task 22", status: "todo" },
-    // { id: "3", title: "Task 3", status: "inProgress" },
-    // { id: "4", title: "Task 4", status: "done" },
-  ]);
-
-  const [tasks3, setTasks3] = useState([
-    { id: "13", title: "Task 13", status: "todo" },
-    { id: "23", title: "Task 23", status: "todo" },
-    // { id: "3", title: "Task 3", status: "inProgress" },
-    // { id: "4", title: "Task 4", status: "done" },
-  ]);
+  // Fetch tasks when user email is available
+  useEffect(() => {
+    if (user?.email) {
+      axiosPublic.get(`/user/get-task/${user.email}`).then((response) => {
+        const tasks = response.data;
+        setTodoTask(tasks.filter((task) => task.status === "to-do"));
+        setInProgressTask(
+          tasks.filter((task) => task.status === "in-progress")
+        );
+        setDoneTask(tasks.filter((task) => task.status === "done"));
+      });
+    }
+  }, [user?.email, axiosPublic]); // Dependencies ensure API call on email change
 
   const handleDragEnd = async (event) => {
     const { active, over } = event;
     if (!over) return;
 
     const taskId = active.id;
-    const newStatus = over.id;
+    const newStatus = over.id; // The new status column
 
-    setTasks((prevTasks) =>
-      prevTasks.map((task) =>
-        task.id === taskId ? { ...task, status: newStatus } : task
-      )
-    );
+    // Find and update the task
+    let movedTask = null;
+    let updatedTodo = todoTask.filter((task) => {
+      if (task.taskId === taskId) {
+        movedTask = { ...task, status: newStatus };
+        return false;
+      }
+      return true;
+    });
 
+    let updatedInProgress = inProgressTask.filter((task) => {
+      if (task.taskId === taskId) {
+        movedTask = { ...task, status: newStatus };
+        return false;
+      }
+      return true;
+    });
+
+    let updatedDone = doneTask.filter((task) => {
+      if (task.taskId === taskId) {
+        movedTask = { ...task, status: newStatus };
+        return false;
+      }
+      return true;
+    });
+
+    if (movedTask) {
+      if (newStatus === "to-do") updatedTodo.push(movedTask);
+      if (newStatus === "in-progress") updatedInProgress.push(movedTask);
+      if (newStatus === "done") updatedDone.push(movedTask);
+    }
+
+    // Update frontend state
+    setTodoTask(updatedTodo);
+    setInProgressTask(updatedInProgress);
+    setDoneTask(updatedDone);
+
+    // Update backend with new status
     try {
-      await axios.patch(`/api/tasks/${taskId}`, { status: newStatus });
+      await axiosPublic.patch(`/user/edit-task/${user.email}/${taskId}`, {
+        status: newStatus,
+      });
     } catch (error) {
       console.error("Failed to update task status", error);
     }
@@ -53,16 +88,19 @@ const Home = () => {
       </Helmet>
 
       <DndContext onDragEnd={handleDragEnd}>
-        <div className="grid grid-cols-3 justify-items-center gap-4">
-          <DroppableSection id="todo" title="To-Do" tasks={tasks1} />
+        <div className="grid grid-cols-1 lg:grid-cols-3 justify-items-center gap-4">
+          <DroppableSection id="to-do" title="To-Do" tasks={todoTask} />
           <DroppableSection
-            id="inProgress"
+            id="in-progress"
             title="In Progress"
-            tasks={tasks12}
+            tasks={inProgressTask}
           />
-          <DroppableSection id="done" title="Done" tasks={tasks3} />
+          <DroppableSection id="done" title="Done" tasks={doneTask} />
         </div>
       </DndContext>
+
+      {/* add task modal */}
+      <AddTaskModal />
     </div>
   );
 };

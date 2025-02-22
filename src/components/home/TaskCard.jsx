@@ -2,7 +2,7 @@ import { useDraggable } from "@dnd-kit/core";
 
 const TaskCard = ({ task }) => {
   const { attributes, listeners, setNodeRef, transform } = useDraggable({
-    id: task.id,
+    id: task.taskId,
   });
 
   const style = transform
@@ -17,7 +17,8 @@ const TaskCard = ({ task }) => {
       {...attributes}
       className="card w-96 bg-base-100 shadow-sm p-4 cursor-grab"
     >
-      <h2 className="text-lg font-semibold">{task.title}</h2>
+      <h2 className="text-lg font-semibold">{task.description}</h2>
+      <h2 className="text-md font-semibold text-green-400">{task.status}</h2>
     </div>
   );
 };

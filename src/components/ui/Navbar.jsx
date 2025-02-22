@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import { useNavigate } from "react-router";
 import { AuthContext } from "../../provider/AuthProvider";
+import { IoAddCircleOutline } from "react-icons/io5";
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -39,7 +40,7 @@ const Navbar = () => {
               />{" "}
             </svg>
           </div>
-          <ul
+          {/* <ul
             tabIndex={0}
             class="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
           >
@@ -60,11 +61,11 @@ const Navbar = () => {
             <li>
               <a>Item 3</a>
             </li>
-          </ul>
+          </ul> */}
         </div>
         <a className="btn btn-ghost text-xl">TaskHandler</a>
       </div>
-      <div className="navbar-center hidden lg:flex">
+      {/* <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1">
           <li>
             <a>Item 1</a>
@@ -86,8 +87,15 @@ const Navbar = () => {
             <a>Item 3</a>
           </li>
         </ul>
-      </div>
+      </div> */}
       <div className="navbar-end flex gap-x-4">
+        <button
+          className="px-4 py-2 bg-yellow-200 rounded-xl text-lg text-gray-600 font-semibold cursor-pointer hover:bg-yellow-400 flex gap-x-2 items-center"
+          onClick={() => document.getElementById("AddTaskModal").showModal()}
+        >
+          <p>Add Task</p>
+          <IoAddCircleOutline className="text-2xl" />
+        </button>
         {user ? (
           <button
             onClick={() => handleLogout()}
