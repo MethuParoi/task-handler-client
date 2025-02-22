@@ -5,6 +5,7 @@ import DroppableSection from "../components/home/DroppableSection";
 import useAxiosPublic from "../hooks/useAxiosPublic";
 import { AuthContext } from "../provider/AuthProvider";
 import AddTaskModal from "../components/home/AddTaskModal";
+import EditTaskModal from "../components/home/EditTaskModal";
 
 const Home = () => {
   const [refetchTodo, setRefetchTodo] = useState(false);
@@ -90,18 +91,31 @@ const Home = () => {
 
       <DndContext onDragEnd={handleDragEnd}>
         <div className="grid grid-cols-1 lg:grid-cols-3 justify-items-center gap-4">
-          <DroppableSection id="to-do" title="To-Do" tasks={todoTask} />
           <DroppableSection
+            setRefetchTodo={setRefetchTodo}
+            id="to-do"
+            title="To-Do"
+            tasks={todoTask}
+          />
+          <DroppableSection
+            setRefetchTodo={setRefetchTodo}
             id="in-progress"
             title="In Progress"
             tasks={inProgressTask}
           />
-          <DroppableSection id="done" title="Done" tasks={doneTask} />
+          <DroppableSection
+            setRefetchTodo={setRefetchTodo}
+            id="done"
+            title="Done"
+            tasks={doneTask}
+          />
         </div>
       </DndContext>
 
       {/* add task modal */}
       <AddTaskModal setRefetchTodo={setRefetchTodo} />
+      {/* edit task modal */}
+      <EditTaskModal setRefetchTodo={setRefetchTodo} />
     </div>
   );
 };

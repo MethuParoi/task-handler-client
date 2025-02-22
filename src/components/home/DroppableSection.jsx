@@ -1,7 +1,7 @@
 import { useDroppable } from "@dnd-kit/core";
 import TaskCard from "./TaskCard";
 
-const DroppableSection = ({ id, title, tasks }) => {
+const DroppableSection = ({ id, title, tasks, setRefetchTodo }) => {
   const { setNodeRef, isOver } = useDroppable({ id });
 
   return (
@@ -13,7 +13,11 @@ const DroppableSection = ({ id, title, tasks }) => {
     >
       <h1 className="text-2xl font-semibold text-indigo-800">{title}</h1>
       {tasks.map((task) => (
-        <TaskCard key={task.taskId} task={task} />
+        <TaskCard
+          key={task.taskId}
+          task={task}
+          setRefetchTodo={setRefetchTodo}
+        />
       ))}
     </div>
   );
