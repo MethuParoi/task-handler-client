@@ -7,7 +7,7 @@ const DroppableSection = ({ id, title, tasks }) => {
   return (
     <div
       ref={setNodeRef}
-      className={`flex flex-col items-center justify-start min-h-[50dvh] gap-y-5 p-4 bg-gray-100 rounded-lg shadow-xl min-w-96 border-2 border-gray-300 ${
+      className={`flex flex-col items-center justify-start min-h-[50dvh] gap-y-5 p-4 bg-gray-100 rounded-lg shadow-xl min-w-96 border-2 border-gray-300 my-5 overflow-x-hidden ${
         isOver ? "bg-indigo-200" : ""
       }`}
     >

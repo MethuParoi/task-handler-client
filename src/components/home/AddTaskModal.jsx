@@ -1,6 +1,12 @@
 import { useForm } from "react-hook-form";
+import useAxiosPublic from "../../hooks/useAxiosPublic";
+import { AuthContext } from "../../provider/AuthProvider";
+import { useContext } from "react";
+import { toast } from "react-toastify";
 
 const AddTaskModal = () => {
+  const axiosPublic = useAxiosPublic();
+  const { user } = useContext(AuthContext);
   const {
     register,
     handleSubmit,
@@ -8,20 +14,39 @@ const AddTaskModal = () => {
   } = useForm();
   //random taskId
   const taskId = Math.floor(Math.random() * 10000);
+  //current time
+  const getCurrentTime = () => {
+    const now = new Date();
+    const date = now.toLocaleDateString();
+    let hours = now.getHours();
+    const minutes = now.getMinutes();
+    const ampm = hours >= 12 ? "PM" : "AM";
+    hours = hours % 12;
+    hours = hours ? hours : 12; // the hour '0' should be '12'
+    const strTime =
+      hours + ":" + (minutes < 10 ? "0" + minutes : minutes) + " " + ampm;
+    return `${date} ${strTime}`;
+  };
 
   //submit form data
   const onSubmit = async (data) => {
-    const taskInfo = {
-      taskId: taskId,
-      taskTitle: data.title,
-      taskDescription: data.description,
-      photoURL: data.photoUrl,
-    };
+    const task = [
+      {
+        taskId: taskId,
+        title: data.title,
+        description: data.description,
+        status: data.category,
+        timeStamp: getCurrentTime(),
+      },
+    ];
     try {
-      await axios.post("/api/tasks", taskInfo);
-      // handle success (e.g., close modal, show success message)
+      await axiosPublic.post(`/user/post-task/${user?.email}`, { task });
+      //close modal
+      document.getElementById("AddTaskModal").close();
+      toast.success("Task added successfully!");
     } catch (error) {
-      // handle error (e.g., show error message)
+      document.getElementById("AddTaskModal").close();
+      toast.error("Error adding task");
     }
   };
 
@@ -106,7 +131,9 @@ const AddTaskModal = () => {
             <select
               id="category"
               name="category"
-              className="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              className="block w-full mt-1 py-2 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              defaultValue="to-do"
+              {...register("category", { required: "Category is required" })}
             >
               <option value="to-do">To-Do</option>
               <option value="in-progress">In Progress</option>
@@ -123,7 +150,7 @@ const AddTaskModal = () => {
             type="submit"
             className="w-[80%] px-4 py-2 text-lg font-medium text-white bg-indigo-700 rounded-md hover:bg-indigo-800 cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-400"
           >
-            Login
+            Add Task
           </button>
         </form>
       </div>
