@@ -4,12 +4,14 @@ import useAxiosPublic from "../../hooks/useAxiosPublic";
 import { AuthContext } from "../../provider/AuthProvider";
 import { useContext } from "react";
 import { toast } from "react-toastify";
+import { FaGripVertical } from "react-icons/fa";
 
 const TaskCard = ({ task, setRefetchTodo }) => {
   const axiosPublic = useAxiosPublic();
   const { user, setTaskDetails } = useContext(AuthContext);
   const { attributes, listeners, setNodeRef, transform } = useDraggable({
     id: task.taskId,
+    activationConstraint: { delay: 250, tolerance: 5 },
   });
 
   const style = transform
@@ -51,8 +53,17 @@ const TaskCard = ({ task, setRefetchTodo }) => {
       style={style}
       {...listeners}
       {...attributes}
-      className="card w-[320px] sm:w-96 bg-base-100 shadow-sm p-4 cursor-grab"
+      className="card w-[320px] sm:w-96 bg-base-100 shadow-sm pt-8 pb-4 px-4 cursor-grab active:cursor-grabbing"
+      // className="card w-[320px] sm:w-96 bg-base-100 shadow-sm pt-8 pb-4 px-4 cursor-grab"
     >
+      {/* Drag Handle Button - Only visible on mobile (hidden on large screens) */}
+      <button
+        {...listeners}
+        {...attributes}
+        className="absolute top-2 right-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 cursor-grab active:cursor-grabbing block md:hidden"
+      >
+        <FaGripVertical size={24} />
+      </button>
       <div className="flex justify-between items-start">
         <div>
           <h2 className="text-lg font-semibold">{task.title}</h2>
@@ -96,3 +107,4 @@ const TaskCard = ({ task, setRefetchTodo }) => {
 };
 
 export default TaskCard;
+
