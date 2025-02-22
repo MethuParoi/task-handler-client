@@ -1,58 +1,53 @@
 import { useForm } from "react-hook-form";
 import useAxiosPublic from "../../hooks/useAxiosPublic";
 import { AuthContext } from "../../provider/AuthProvider";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { toast } from "react-toastify";
 
 const EditTaskModal = ({ setRefetchTodo }) => {
   const axiosPublic = useAxiosPublic();
-  const { user } = useContext(AuthContext);
+  const { user, taskDetails } = useContext(AuthContext);
   const {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm();
-  //random taskId
-  //   const taskId = Math.floor(Math.random() * 10000);
-  //   //current time
-  //   const getCurrentTime = () => {
-  //     const now = new Date();
-  //     const date = now.toLocaleDateString();
-  //     let hours = now.getHours();
-  //     const minutes = now.getMinutes();
-  //     const ampm = hours >= 12 ? "PM" : "AM";
-  //     hours = hours % 12;
-  //     hours = hours ? hours : 12; // the hour '0' should be '12'
-  //     const strTime =
-  //       hours + ":" + (minutes < 10 ? "0" + minutes : minutes) + " " + ampm;
-  //     return `${date} ${strTime}`;
-  //   };
+
+  useEffect(() => {
+    console.log(taskDetails);
+    if (taskDetails) {
+      reset({
+        title: taskDetails.title,
+        description: taskDetails.description,
+        category: taskDetails.status, // Ensure the field name matches the form field
+      });
+    }
+  }, [taskDetails, reset]);
 
   //submit form data
   const onSubmit = async (data) => {
-    const task = [
-      {
-        title: data.title,
-        description: data.description,
-        status: data.category,
-      },
-    ];
     try {
-      await axiosPublic.post(`/user/edit-task/${user?.email}/${user?.email}`, {
-        task,
-      });
+      await axiosPublic.patch(
+        `/user/edit-task/${user?.email}/${taskDetails?.taskId}`,
+        {
+          title: data.title,
+          description: data.description,
+          status: data.category,
+        }
+      );
       //close modal
-      document.getElementById("AddTaskModal").close();
-      toast.success("Task added successfully!");
+      document.getElementById("EditTaskModal").close();
+      toast.success("Task edited successfully!");
       setRefetchTodo((prev) => !prev);
     } catch (error) {
-      document.getElementById("AddTaskModal").close();
-      toast.error("Error adding task");
+      document.getElementById("EditTaskModal").close();
+      toast.error("Error editing task");
     }
   };
 
   return (
-    <dialog id="AddTaskModal" className="modal">
+    <dialog id="EditTaskModal" className="modal">
       <div className="modal-box">
         <form method="dialog">
           {/* if there is a button in form, it will close the modal */}
@@ -160,7 +155,3 @@ const EditTaskModal = ({ setRefetchTodo }) => {
 };
 
 export default EditTaskModal;
-
-{
-  /* You can open the modal using document.getElementById('ID').showModal() method */
-}

@@ -61,7 +61,7 @@ const TaskCard = ({ task, setRefetchTodo }) => {
         <div className="flex gap-2 mt-2">
           <button
             onClick={() => {
-              document.getElementById("AddTaskModal").showModal();
+              // document.getElementById("AddTaskModal").showModal();
               handleEdit();
             }}
             onPointerDown={(e) => e.stopPropagation()}
