@@ -7,7 +7,7 @@ const DroppableSection = ({ id, title, tasks, setRefetchTodo }) => {
   return (
     <div
       ref={setNodeRef}
-      className={`flex flex-col items-center justify-start min-h-[50dvh] gap-y-5 p-4 bg-gray-100 rounded-lg shadow-xl min-w-96 border-2 border-gray-300 my-5  ${
+      className={`flex flex-col items-center justify-start min-h-[50dvh] gap-y-5 p-4 bg-gray-100 rounded-lg shadow-xl min-w-[300px] sm:min-w-[400px] border-2 border-gray-300 my-5  ${
         isOver ? "bg-indigo-200" : ""
       }`}
     >

@@ -51,7 +51,7 @@ const TaskCard = ({ task, setRefetchTodo }) => {
       style={style}
       {...listeners}
       {...attributes}
-      className="card w-96 bg-base-100 shadow-sm p-4 cursor-grab"
+      className="card w-[320px] sm:w-96 bg-base-100 shadow-sm p-4 cursor-grab"
     >
       <div className="flex justify-between items-start">
         <div>
