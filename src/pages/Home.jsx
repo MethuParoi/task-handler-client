@@ -7,6 +7,7 @@ import { AuthContext } from "../provider/AuthProvider";
 import AddTaskModal from "../components/home/AddTaskModal";
 
 const Home = () => {
+  const [refetchTodo, setRefetchTodo] = useState(false);
   const [todoTask, setTodoTask] = useState([]);
   const [inProgressTask, setInProgressTask] = useState([]);
   const [doneTask, setDoneTask] = useState([]);
@@ -25,7 +26,7 @@ const Home = () => {
         setDoneTask(tasks.filter((task) => task.status === "done"));
       });
     }
-  }, [user?.email, axiosPublic]); // Dependencies ensure API call on email change
+  }, [user?.email, axiosPublic, refetchTodo]);
 
   const handleDragEnd = async (event) => {
     const { active, over } = event;
@@ -100,7 +101,7 @@ const Home = () => {
       </DndContext>
 
       {/* add task modal */}
-      <AddTaskModal />
+      <AddTaskModal setRefetchTodo={setRefetchTodo} />
     </div>
   );
 };

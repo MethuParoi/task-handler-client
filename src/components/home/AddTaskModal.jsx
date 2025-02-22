@@ -4,7 +4,7 @@ import { AuthContext } from "../../provider/AuthProvider";
 import { useContext } from "react";
 import { toast } from "react-toastify";
 
-const AddTaskModal = () => {
+const AddTaskModal = ({ setRefetchTodo }) => {
   const axiosPublic = useAxiosPublic();
   const { user } = useContext(AuthContext);
   const {
@@ -44,6 +44,7 @@ const AddTaskModal = () => {
       //close modal
       document.getElementById("AddTaskModal").close();
       toast.success("Task added successfully!");
+      setRefetchTodo((prev) => !prev);
     } catch (error) {
       document.getElementById("AddTaskModal").close();
       toast.error("Error adding task");
